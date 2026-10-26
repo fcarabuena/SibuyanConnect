@@ -1,0 +1,92 @@
+# Romblomanon UI strings for SibuyanConnect.
+# DRAFT: written as a starting point and NOT yet reviewed by a native speaker.
+# Please have LGU staff or a local language expert review every line before launch.
+# Untranslated strings fall back to English.
+msgid ""
+msgstr ""
+"Language: rol\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "News"
+msgstr "Balita"
+
+msgid "Services"
+msgstr "Serbisyo"
+
+msgid "Programs"
+msgstr "Programa"
+
+msgid "Report a Concern"
+msgstr "Mag-report it Problema"
+
+msgid "Report"
+msgstr "Report"
+
+msgid "Ferry"
+msgstr "Barko"
+
+msgid "Ferry Schedule"
+msgstr "Iskedyul it Barko"
+
+msgid "Ask"
+msgstr "Pamangkot"
+
+msgid "All towns"
+msgstr "Tanan nga banwa"
+
+msgid "Sibuyan Island, Romblon"
+msgstr "Isla it Sibuyan, Romblon"
+
+msgid "News & Updates"
+msgstr "Balita kag Abiso"
+
+msgid "What do I need?"
+msgstr "Ano ang kinahangean ko?"
+
+msgid "Requirements"
+msgstr "Mga kinahangean"
+
+msgid "Yes"
+msgstr "Huo"
+
+msgid "No"
+msgstr "Bukon"
+
+msgid "Free"
+msgstr "Libre"
+
+msgid "Where?"
+msgstr "Diin?"
+
+msgid "Search"
+msgstr "Pangita"
+
+msgid "Send concern"
+msgstr "Ipadaea"
+
+msgid "Be prepared"
+msgstr "Mag-preparar"
+
+msgid "Ask LGU staff"
+msgstr "Pamangkot sa LGU"
+
+msgid "Services, news and guidance for Sibuyan"
+msgstr "Serbisyo, balita kag giya para sa Sibuyan"
+
+msgid "How can we help?"
+msgstr "Pauno kami makabulig?"
+
+msgid "Today on Sibuyan"
+msgstr "Subong sa Sibuyan"
+
+msgid "Discover Sibuyan"
+msgstr "Tukiba ang Sibuyan"
+
+msgid "The Galápagos of Asia"
+msgstr "Ang Galápagos it Asya"
+
+msgid "Did you know?"
+msgstr "Kabalo ka bala?"

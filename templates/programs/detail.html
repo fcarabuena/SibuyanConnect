@@ -1,0 +1,25 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{{ program.name }}{% endblock %}
+{% block content %}
+<div class="container">
+  <header class="page-head">
+    <p class="crumbs"><a href="{% url 'home' %}">{% trans "Home" %}</a> / <a href="{% url 'programs:list' %}">{% trans "Programs" %}</a></p>
+    <h1>{{ program.name }}</h1>
+    <p>{{ program.summary }}</p>
+    <p><span class="tag">{{ program.get_kind_display }}</span> <span class="tag blue">{{ program.agency }} · {{ program.get_level_display }}</span></p>
+  </header>
+  <div class="layout-2" style="margin-top:1rem">
+    <div class="stack">
+      {% if program.benefits %}<section class="card"><h2 style="font-size:1.4rem">{% trans "Benefits" %}</h2>{{ program.benefits|linebreaks }}</section>{% endif %}
+      {% if program.how_to_apply %}<section class="card"><h2 style="font-size:1.4rem">{% trans "How to apply" %}</h2>{{ program.how_to_apply|linebreaks }}</section>{% endif %}
+      {% if program.eligibility_notes %}<div class="note"><strong>{% trans "Who qualifies:" %}</strong> {{ program.eligibility_notes }}</div>{% endif %}
+    </div>
+    <aside class="stack">
+      {% if program.contact_office %}<section class="card"><h2 style="font-size:1.3rem">{% trans "Contact" %}</h2><p>{{ program.contact_office.name }}<br><span class="meta">{{ program.contact_office.location }}</span>{% if program.contact_office.phone %}<br><a href="tel:{{ program.contact_office.phone }}">{{ program.contact_office.phone }}</a>{% endif %}</p></section>{% endif %}
+      {% if schedules %}<section class="card"><h2 style="font-size:1.3rem">{% trans "Schedules" %}</h2>{% for s in schedules %}<p><strong>{{ s.title }}</strong><br><span class="meta">{{ s.opens_on|date:"M j" }}{% if s.closes_on %} – {{ s.closes_on|date:"M j, Y" }}{% endif %} · {{ s.venue }}</span></p>{% endfor %}</section>{% endif %}
+      {% if program.official_url %}<p><a href="{{ program.official_url }}" rel="noopener">{% trans "Official program page" %} ↗</a></p>{% endif %}
+      <a class="btn block" href="{% url 'programs:eligibility' %}">{% trans "Check my eligibility" %}</a>
+    </aside>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% load i18n ui %}<a class="news-card" href="{{ post.get_absolute_url }}">
+  <div class="thumb{% if forloop.counter|divisibleby:2 %} sky{% endif %}">{% if post.image %}<img src="{{ post.image.url }}" alt="" loading="lazy" decoding="async" width="640" height="280">{% else %}{% icon "news" 36 %}{% endif %}</div>
+  <div class="news-body">
+    <span>{% if post.is_pinned %}<span class="tag red">{% trans "Pinned" %}</span> {% endif %}<span class="tag">{{ post.get_category_display }}</span></span>
+    <h3>{{ post.title }}</h3>
+    <p class="excerpt">{{ post.summary }}</p>
+    <div class="news-foot"><span>{{ post.published_at|date:"M j, Y" }}{% if post.municipality %} · {{ post.municipality.name }}{% endif %}</span><span class="more">{% trans "Read more" %}</span></div>
+  </div>
+</a>

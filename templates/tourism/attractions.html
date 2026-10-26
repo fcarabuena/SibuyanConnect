@@ -1,0 +1,83 @@
+{% extends "base.html" %}{% load i18n static ui %}
+{% block title %}{% trans "Discover Sibuyan" %}{% endblock %}
+{% block content %}
+<div class="container">
+  <header class="page-head">
+    <p class="crumbs"><a href="{% url 'home' %}">{% trans "Home" %}</a> / {% trans "Tourism" %}</p>
+    <p class="hero-tagline" style="color:var(--green)">{% trans "The Galápagos of Asia" %}</p>
+    <h1>{% trans "Discover Sibuyan" %}</h1>
+    <p>{% trans "Mountains, rivers, falls and reefs, much of it protected. Travel lightly, hire local guides and respect the communities you visit." %}</p>
+    {% include "_town_pills.html" %}
+  </header>
+
+  <div class="info-cards" style="margin-top:1.5rem">
+    <div class="info-card"><h4>{% icon "sun" 18 %}{% trans "Best time to visit" %}</h4>
+      <p>{% trans "Usually the drier months, March to May. June to November brings more rain and typhoons: check PAGASA and the ferry board before you travel." %}</p></div>
+    <div class="info-card"><h4>{% icon "ship" 18 %}{% trans "How to get there" %}</h4>
+      <p>{% trans "Ferries reach Magdiwang, San Fernando and Cajidiocan from Batangas, Lucena, Romblon town and Roxas City." %} <a href="{% url 'transport:board' %}">{% trans "Ferry board" %}</a></p></div>
+    <div class="info-card"><h4>{% icon "leaf" 18 %}{% trans "Travel responsibly" %}</h4>
+      <p>{% trans "Much of the island is a protected natural park and ancestral domain of the Sibuyan Mangyan Tagabukid." %} <a href="#rules">{% trans "Read the rules" %}</a></p></div>
+  </div>
+
+  <section style="margin-top:2.5rem" aria-labelledby="map-h">
+    <h2 id="map-h" style="font-size:1.5rem">{% trans "Map of attractions" %}</h2>
+    <div id="attractions-map" class="map" data-map data-pins="map-pins" data-fallback="map-fallback" role="region" aria-label="{% trans 'Map of attractions on Sibuyan Island' %}"></div>
+    <div id="map-fallback" class="map-fallback" hidden>
+      <p class="map-fallback-title">{% icon "pin" 20 %}{% trans "Map unavailable offline" %}</p>
+      <p class="meta">{% trans "The map could not load. Here are the attractions; each one lists how to get there." %}</p>
+      <ul>{% for a in attractions %}<li><a href="#{{ a.slug }}">{{ a.name }}</a> <span class="meta">· {{ a.municipality.name }}</span></li>{% endfor %}</ul>
+    </div>
+    <p class="meta" style="margin-top:.5rem">{% trans "Pins are approximate (sample) until each Tourism Office confirms the exact spots." %}</p>
+    {{ pins|json_script:"map-pins" }}
+  </section>
+
+  {% for a in attractions %}
+  <article class="place" id="{{ a.slug }}" aria-labelledby="h-{{ a.slug }}">
+    <div class="place-media">
+      {% if a.photos.header %}
+      <figure class="place-photo zoom">
+        <img src="{{ a.photos.header.src }}" srcset="{{ a.photos.header.srcset }}" sizes="(min-width: 900px) 600px, 100vw" width="{{ a.photos.header.width }}" height="{{ a.photos.header.height }}" alt="{{ a.photos.header.alt }}" loading="lazy" decoding="async">
+        <figcaption class="photo-credit">{% trans "Photo:" %} <a href="{{ a.photos.header.source }}" rel="noopener">{{ a.photos.header.credit }}</a></figcaption>
+      </figure>
+      {% else %}
+      <div class="place-photo placeholder"><span>{% icon "camera" 24 %}{% blocktrans with name=a.name %}Photo needed: {{ name }}{% endblocktrans %}<br><span class="meta" style="font-weight:400">{% trans "Have a photo you can share under a free licence? Send it to the Tourism Office." %}</span></span></div>
+      {% endif %}
+      {% if a.photos.gallery %}
+      <div class="place-gallery">
+        {% for g in a.photos.gallery %}
+        <figure class="zoom"><img src="{{ g.src }}" srcset="{{ g.srcset }}" sizes="(min-width: 900px) 150px, 50vw" width="{{ g.width }}" height="{{ g.height }}" alt="{{ g.alt }}" loading="lazy" decoding="async"></figure>
+        {% endfor %}
+      </div>
+      <p class="credits-line" style="margin-top:0">{% trans "Photos, left to right:" %} {% for g in a.photos.gallery %}<a href="{{ g.source }}" rel="noopener">{{ g.credit }}</a>{% if not forloop.last %} · {% endif %}{% endfor %}</p>
+      {% endif %}
+    </div>
+    <div class="place-body">
+      <p><span class="tag">{{ a.get_kind_display }}</span> <span class="tag blue">{{ a.municipality.name }}</span>{% if a.is_protected_area %} <span class="tag">{% icon "leaf" 14 %}{% trans "Protected area" %}</span>{% endif %}</p>
+      <h2 id="h-{{ a.slug }}" style="font-size:1.8rem">{{ a.name }}</h2>
+      <p class="muted">{{ a.summary }}</p>
+      {% for adv in a.advisories.all|slice:":1" %}<p><span class="badge {% if adv.status == 'closed' %}danger{% elif adv.status == 'restricted' %}warn{% else %}ok{% endif %}">{{ adv.trail }}: {{ adv.get_status_display }}</span> <span class="meta">{{ adv.season_note }}</span></p>{% endfor %}
+      <div class="info-cards stacked">
+        <div class="info-card"><h4>{% icon "sun" 18 %}{% trans "Best time to visit" %}</h4><p>{{ a.best_time|default:"—" }}</p></div>
+        <div class="info-card"><h4>{% icon "route" 18 %}{% trans "How to get there" %}</h4><p>{{ a.getting_there|default:"—" }}</p></div>
+        <div class="info-card"><h4>{% icon "person" 18 %}{% trans "Guides and fees" %}</h4><p>{{ a.guide_requirement|default:_("No guide required") }}{% if a.environmental_fee %}<br>{% trans "Environmental fee:" %} ₱{{ a.environmental_fee|floatformat:"-2" }}{% if a.fee_notes %} <span class="meta">({{ a.fee_notes }})</span>{% endif %}{% endif %}</p></div>
+      </div>
+    </div>
+  </article>
+  {% endfor %}
+
+  <section class="section" style="padding-bottom:0" aria-labelledby="rules-h" id="rules">
+    <div class="section-head"><div><h2 id="rules-h">{% trans "Travel responsibly" %}</h2><p>{% trans "Rules for protected areas and the ancestral domain of the Sibuyan Mangyan Tagabukid." %}</p></div></div>
+    <div class="grid sm-2">
+      {% for r in rules %}<div class="card flat"><span class="tag blue">{{ r.get_scope_display }}</span><h3 style="margin:.6rem 0 .3rem">{{ r.title }}</h3><p class="meta" style="margin:0">{{ r.body }}</p></div>{% endfor %}
+    </div>
+  </section>
+
+  <section class="section" style="padding-bottom:0" aria-labelledby="biz-h">
+    <div class="section-head"><div><h2 id="biz-h">{% trans "Accredited stays, food, guides and transport" %}</h2><p>{% trans "Listed by the municipal tourism offices (sample entries)." %}</p></div></div>
+    <div class="card table-wrap"><table>
+      <thead><tr><th>{% trans "Name" %}</th><th>{% trans "Type" %}</th><th>{% trans "Contact" %}</th></tr></thead>
+      <tbody>{% for b in businesses %}<tr><td>{{ b.name }}<br><span class="meta">{{ b.municipality.name }} · {{ b.accredited_by }}</span></td><td>{{ b.get_kind_display }}</td><td>{% if b.phone %}<a href="tel:{{ b.phone }}">{{ b.phone }}</a>{% endif %}</td></tr>{% endfor %}</tbody>
+    </table></div>
+  </section>
+</div>
+{% endblock %}

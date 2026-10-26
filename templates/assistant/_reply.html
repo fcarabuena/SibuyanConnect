@@ -1,0 +1,13 @@
+{% load i18n %}<div class="bubble me"><p>{{ question }}</p></div>
+<div class="bubble">
+  {% if result.answer %}{{ result.answer|linebreaks }}{% if result.layer == "llm" %}<p class="meta">{% trans "AI-generated from site information. Please confirm with the office." %}</p>{% endif %}{% endif %}
+  {% if result.link %}<p><a href="{{ result.link }}">{% trans "Learn more" %} →</a></p>{% endif %}
+  {% if result.links %}
+    <p>{% if result.answer %}{% trans "Related pages:" %}{% else %}{% trans "These pages may help:" %}{% endif %}</p>
+    <ul>{% for l in result.links %}<li><a href="{{ l.url }}">{{ l.title }}</a></li>{% endfor %}</ul>
+  {% endif %}
+  {% if result.handoff %}
+    <p>{% trans "Sorry, I don't have an answer for that yet. A staff member from your LGU can answer you directly." %}</p>
+    <a class="btn small" href="{% url 'concerns:new' %}?category=request&amp;source=assistant&amp;description={{ question|urlencode }}">{% trans "Ask LGU staff" %}</a>
+  {% endif %}
+</div>

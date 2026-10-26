@@ -1,0 +1,40 @@
+{% extends "base.html" %}{% load i18n ui %}
+{% block title %}{% trans "Municipal Services" %}{% endblock %}
+{% block content %}
+<div class="container">
+  <header class="page-head">
+    <p class="crumbs"><a href="{% url 'home' %}">{% trans "Home" %}</a> / {% trans "Services" %}</p>
+    <h1>{% trans "Municipal services" %}</h1>
+    <p>{% trans "Requirements, steps, fees and office hours, based on each LGU's Citizen's Charter." %}</p>
+    {% include "_town_pills.html" %}
+  </header>
+
+  <form class="search" method="get" role="search" style="margin:1.5rem 0 1rem">
+    {% icon "search" 20 %}
+    <label for="svc-q" class="visually-hidden">{% trans "Search services" %}</label>
+    <input id="svc-q" type="search" name="q" value="{{ q }}" placeholder="{% trans 'e.g. birth certificate, cedula' %}">
+    {% if active_category %}<input type="hidden" name="category" value="{{ active_category }}">{% endif %}
+    <button class="btn">{% trans "Search" %}</button>
+  </form>
+
+  <nav class="chips" aria-label="{% trans 'Categories' %}">
+    <a class="pill" href="?{% if q %}q={{ q|urlencode }}{% endif %}" aria-current="{% if not active_category %}true{% else %}false{% endif %}">{% trans "All" %}</a>
+    {% for c in categories %}
+    <a class="pill" href="?category={{ c.slug }}{% if q %}&amp;q={{ q|urlencode }}{% endif %}" aria-current="{% if active_category == c.slug %}true{% else %}false{% endif %}">{{ c.name }}</a>
+    {% endfor %}
+  </nav>
+
+  <div class="grid sm-2 md-3" style="margin-top:.5rem">
+    {% for s in services %}
+    <a class="card card-link" href="{{ s.get_absolute_url }}">
+      <span class="tag">{{ s.category.name }}</span>{% if s.municipality and not current_town %} <span class="tag blue">{{ s.municipality.name }}</span>{% endif %}
+      <h3 style="margin:.75rem 0 .35rem">{{ s.name }}</h3>
+      <p class="meta" style="margin-bottom:.75rem">{{ s.summary|truncatewords:20 }}</p>
+      <p class="meta" style="margin:0">{% trans "Time:" %} {{ s.processing_time|default:"—" }} · {% trans "Fee:" %} {% if s.fee_amount %}₱{{ s.fee_amount|floatformat:"-2" }}{% elif s.fee_amount == 0 %}{% trans "Free" %}{% else %}{% trans "varies" %}{% endif %}</p>
+    </a>
+    {% empty %}
+    <p>{% trans "No services match your search." %} <a href="{% url 'assistant:chat' %}?q={{ q|urlencode }}">{% trans "Ask the help assistant" %}</a></p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

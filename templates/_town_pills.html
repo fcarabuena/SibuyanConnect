@@ -1,0 +1,5 @@
+{% load i18n %}<nav class="towns" aria-label="{% trans 'Choose a town' %}">
+  <span class="label">{% trans "Showing:" %}</span>
+  <a class="pill" href="{% url 'set-town' %}?next={{ request.get_full_path|urlencode }}" aria-current="{% if not current_town %}true{% else %}false{% endif %}">{% trans "All towns" %}</a>
+  {% for t in towns %}<a class="pill" href="{% url 'set-town' %}?town={{ t.slug }}&amp;next={{ request.get_full_path|urlencode }}" aria-current="{% if current_town == t %}true{% else %}false{% endif %}">{{ t.name }}</a>{% endfor %}
+</nav>

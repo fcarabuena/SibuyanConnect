@@ -1,0 +1,50 @@
+{% extends "admin/base_site.html" %}
+{% block breadcrumbs %}<div class="breadcrumbs"><a href="{% url 'admin:index' %}">Home</a> › Analytics</div>{% endblock %}
+{% block content %}
+<div id="content-main">
+  <form method="get" style="margin-bottom:1rem">
+    Period: <select name="days" onchange="this.form.submit()">
+      <option value="30"{% if days|stringformat:"s" == "30" %} selected{% endif %}>Last 30 days</option>
+      <option value="90"{% if days|stringformat:"s" == "90" %} selected{% endif %}>Last 90 days</option>
+      <option value="365"{% if days|stringformat:"s" == "365" %} selected{% endif %}>Last 12 months</option>
+    </select>
+    <noscript><button>Apply</button></noscript>
+  </form>
+
+  <div class="module">
+    <h2>Concern tickets per office ({{ total }} total)</h2>
+    <table style="width:100%">
+      <thead><tr><th>Office</th><th>Town</th><th>Total</th><th>Open</th><th>Resolved</th><th>Avg. resolution time</th></tr></thead>
+      <tbody>
+      {% for r in by_office %}
+      <tr><td>{{ r.office__name|default:"(unrouted)" }}</td><td>{{ r.municipality__name }}</td><td>{{ r.total }}</td><td>{{ r.open }}</td><td>{{ r.resolved }}</td>
+          <td>{% if r.avg_hours is not None %}{{ r.avg_hours }} hours{% else %}—{% endif %}</td></tr>
+      {% empty %}<tr><td colspan="6">No tickets in this period.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div style="display:flex;gap:20px;flex-wrap:wrap">
+    <div class="module" style="flex:1;min-width:260px">
+      <h2>By status</h2>
+      <table style="width:100%">{% for s in by_status %}<tr><td>{{ s.status }}</td><td>{{ s.n }}</td></tr>{% endfor %}</table>
+    </div>
+    <div class="module" style="flex:1;min-width:260px">
+      <h2>Top categories</h2>
+      <table style="width:100%">{% for c in by_category %}<tr><td>{{ c.category__name }}</td><td>{{ c.n }}</td></tr>{% endfor %}</table>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:20px;flex-wrap:wrap">
+    <div class="module" style="flex:1;min-width:260px">
+      <h2>Most-viewed services (all time)</h2>
+      <table style="width:100%">{% for s in top_services %}<tr><td>{{ s.name }}</td><td>{{ s.municipality.code|default:"ALL" }}</td><td>{{ s.view_count }}</td></tr>{% endfor %}</table>
+    </div>
+    <div class="module" style="flex:1;min-width:260px">
+      <h2>Most-viewed programs (all time)</h2>
+      <table style="width:100%">{% for p in top_programs %}<tr><td>{{ p.name }}</td><td>{{ p.view_count }}</td></tr>{% endfor %}</table>
+    </div>
+  </div>
+  <p class="help">Computed from SibuyanConnect's own database. No third-party analytics.</p>
+</div>
+{% endblock %}

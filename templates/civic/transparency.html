@@ -1,0 +1,38 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% trans "Transparency" %}{% endblock %}
+{% block content %}
+<div class="container">
+  <header class="page-head">
+    <p class="crumbs"><a href="{% url 'home' %}">{% trans "Home" %}</a> / {% trans "Transparency" %}</p>
+    <h1>{% trans "Transparency" %}</h1>
+    <p>{% trans "Ordinances, executive orders, budget and procurement notices, the Citizen's Charter, and who to contact." %}</p>
+    {% include "_town_pills.html" %}
+  </header>
+
+  <nav class="chips" aria-label="{% trans 'Document types' %}" style="margin-top:1.5rem">
+    <a class="pill" href="?" aria-current="{% if not active_kind %}true{% else %}false{% endif %}">{% trans "All" %}</a>
+    {% for value, label in kinds %}<a class="pill" href="?kind={{ value }}" aria-current="{% if active_kind == value %}true{% else %}false{% endif %}">{{ label }}</a>{% endfor %}
+  </nav>
+  <div class="card table-wrap" style="margin-top:.5rem">
+    <table>
+      <thead><tr><th>{% trans "Document" %}</th><th>{% trans "Type" %}</th><th>{% trans "Issued" %}</th></tr></thead>
+      <tbody>{% for d in documents %}<tr>
+        <td>{% if d.file %}<a href="{{ d.file.url }}">{{ d.title }}</a>{% elif d.external_url %}<a href="{{ d.external_url }}" rel="noopener">{{ d.title }}</a>{% else %}{{ d.title }}{% endif %}{% if d.number %}<br><span class="meta">{{ d.number }}</span>{% endif %}</td>
+        <td>{{ d.get_kind_display }}<br><span class="meta">{{ d.municipality.name|default:_("All towns") }}</span></td>
+        <td>{{ d.date_issued|date:"M j, Y" }}</td></tr>
+      {% empty %}<tr><td colspan="3">{% trans "No documents yet." %}</td></tr>{% endfor %}</tbody>
+    </table>
+  </div>
+
+  <section class="section" style="padding-bottom:0" aria-labelledby="off-h" id="offices">
+    <div class="section-head"><div><h2 id="off-h">{% trans "Officials and offices" %}</h2><p>{% trans "Contact details are samples until each LGU confirms them." %}</p></div></div>
+    <div class="grid sm-2 md-3" style="margin-bottom:1.5rem">
+      {% for o in officials %}<div class="card flat"><h3 style="margin:0">{{ o.name }}</h3><p class="meta" style="margin:0">{{ o.position }}, {{ o.municipality.name }} · {{ o.term }}</p></div>{% endfor %}
+    </div>
+    <div class="card table-wrap"><table>
+      <thead><tr><th>{% trans "Office" %}</th><th>{% trans "Location and hours" %}</th><th>{% trans "Contact" %}</th></tr></thead>
+      <tbody>{% for o in offices %}<tr><td>{{ o.name }}<br><span class="meta">{{ o.municipality.name }}</span></td><td>{{ o.location }}<br><span class="meta">{{ o.office_hours }}</span></td><td>{% if o.phone %}<a href="tel:{{ o.phone }}">{{ o.phone }}</a><br>{% endif %}{% if o.email %}<span class="meta">{{ o.email }}</span>{% endif %}</td></tr>{% endfor %}</tbody>
+    </table></div>
+  </section>
+</div>
+{% endblock %}

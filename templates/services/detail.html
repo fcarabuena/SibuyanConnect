@@ -1,0 +1,87 @@
+{% extends "base.html" %}{% load i18n static ui %}
+{% block title %}{{ service.name }}{% endblock %}
+{% block description %}{{ service.summary|truncatewords:25 }}{% endblock %}
+{% block content %}
+<div class="container">
+  <header class="page-head">
+    <p class="crumbs no-print"><a href="{% url 'home' %}">{% trans "Home" %}</a> / <a href="{% url 'services:list' %}">{% trans "Services" %}</a> / {{ service.category.name }}</p>
+    <h1>{{ service.name }}</h1>
+    <p>{{ service.summary }}</p>
+    <p><span class="tag">{{ service.category.name }}</span>{% if service.municipality %} <span class="tag blue">{{ service.municipality.name }}</span>{% endif %}</p>
+  </header>
+
+  <dl class="facts" style="margin-top:1rem">
+    <div><dt>{% trans "Office" %}</dt><dd>{{ service.office.name|default:_("Barangay Hall") }}</dd></div>
+    <div><dt>{% trans "Fees" %}</dt><dd>{{ service.fees|default:_("Free")|linebreaksbr }}</dd></div>
+    <div><dt>{% trans "Processing time" %}</dt><dd>{{ service.processing_time|default:"—" }}</dd></div>
+    <div><dt>{% trans "Office hours" %}</dt><dd>{{ service.hours|default:"—" }}</dd></div>
+    {% if service.who_may_apply %}<div><dt>{% trans "Who may apply" %}</dt><dd>{{ service.who_may_apply }}</dd></div>{% endif %}
+    {% if service.office.location %}<div><dt>{% trans "Where" %}</dt><dd>{{ service.office.location }}{% if service.office.phone %}<br><a href="tel:{{ service.office.phone }}">{{ service.office.phone }}</a>{% endif %}</dd></div>{% endif %}
+  </dl>
+
+  <div class="layout-2">
+    <div class="stack">
+      <section class="card">
+        <h2 style="font-size:1.5rem">{% trans "Requirements" %}</h2>
+        <ul class="checklist">
+          {% for r in service.requirements.all %}
+          <li>{{ r.text }}{% if r.is_optional %} <span class="tag blue">{% trans "if applicable" %}</span>{% endif %}
+            {% if r.condition %}<span class="meta"><br>{% trans "Only if:" %} {{ r.condition }}</span>{% endif %}
+            {% if r.where_to_get %}<span class="meta"><br>{% trans "Where to get:" %} {{ r.where_to_get }}</span>{% endif %}</li>
+          {% endfor %}
+        </ul>
+      </section>
+      <section class="card">
+        <h2 style="font-size:1.5rem">{% trans "Steps" %}</h2>
+        <ol class="steps">
+          {% for st in service.steps.all %}
+          <li>{{ st.description }}{% if st.responsible or st.duration %}<div class="meta">{{ st.responsible }}{% if st.responsible and st.duration %} · {% endif %}{{ st.duration }}</div>{% endif %}</li>
+          {% endfor %}
+        </ol>
+      </section>
+    </div>
+
+    <aside class="stack">
+      <section class="card flat no-print" aria-labelledby="chk-h">
+        <h2 id="chk-h" style="font-size:1.4rem">{% trans "What do I need?" %}</h2>
+        <p class="meta">{% trans "Answer these and get a checklist you can print or screenshot." %}</p>
+        <form method="get" action="{% url 'services:checklist' service.pk %}"
+              hx-get="{% url 'services:checklist' service.pk %}" hx-target="#checklist-result" hx-trigger="change, submit">
+          {% for q in questions %}
+          <fieldset style="border:0;padding:0;margin:0 0 1rem">
+            <legend style="font-weight:600;margin-bottom:.25rem">{{ q }}</legend>
+            <label class="check" style="display:inline-flex;margin-right:1.25rem"><input type="radio" name="q{{ forloop.counter0 }}" value="yes"> {% trans "Yes" %}</label>
+            <label class="check" style="display:inline-flex"><input type="radio" name="q{{ forloop.counter0 }}" value="no" checked> {% trans "No" %}</label>
+          </fieldset>
+          {% empty %}<p class="meta">{% trans "Everyone needs the same documents for this service." %}</p>{% endfor %}
+          <button class="btn block">{% trans "Make my checklist" %}</button>
+        </form>
+        <div id="checklist-result" aria-live="polite"></div>
+      </section>
+
+      {% if service.forms.all %}
+      <section class="card"><h2 style="font-size:1.3rem">{% trans "Downloadable forms" %}</h2>
+        <ul>{% for f in service.forms.all %}<li><a href="{{ f.url }}" download>{{ f.title }}</a></li>{% endfor %}</ul></section>
+      {% endif %}
+
+      {% if service.office.latitude %}
+      <section class="card no-print">
+        <h2 style="font-size:1.3rem">{% trans "Office location" %}</h2>
+        <div id="office-map" class="map map-small" data-map data-fallback="office-map-fallback" data-lat="{{ service.office.latitude|stringformat:'s' }}" data-lon="{{ service.office.longitude|stringformat:'s' }}" data-label="{{ service.office.name }}" role="region" aria-label="{% trans 'Map of the office location' %}"></div>
+        <div id="office-map-fallback" class="map-fallback" hidden><p class="map-fallback-title">{% trans "Map unavailable offline" %}</p><p class="meta" style="margin:0">{{ service.office.location }}</p></div>
+      </section>
+      {% endif %}
+
+      <section class="no-print">
+        {% if service.legal_basis %}<p class="meta">{% trans "Legal basis:" %} {{ service.legal_basis }}</p>{% endif %}
+        <p class="meta">{% trans "Last updated" %} {{ service.updated_at|date:"M j, Y" }}</p>
+        <div class="actions">
+          <button type="button" class="btn ghost small" data-share data-title="{{ service.name }}" data-copied="{% trans 'Link copied' %}">{% trans "Share" %}</button>
+          <a class="btn ghost small" href="{% url 'concerns:new' %}?category=request&amp;description={{ service.name|urlencode }}">{% trans "Ask the office" %}</a>
+        </div>
+      </section>
+    </aside>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{% static 'vendor/htmx.min.js' %}" defer></script>{% endblock %}

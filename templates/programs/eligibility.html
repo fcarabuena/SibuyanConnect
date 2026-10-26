@@ -1,0 +1,30 @@
+{% extends "base.html" %}{% load i18n static %}
+{% block title %}{% trans "Eligibility checker" %}{% endblock %}
+{% block content %}
+<div class="container">
+  <header class="page-head">
+    <p class="crumbs"><a href="{% url 'home' %}">{% trans "Home" %}</a> / <a href="{% url 'programs:list' %}">{% trans "Programs" %}</a></p>
+    <h1>{% trans "Which programs can I get?" %}</h1>
+    <p>{% trans "Answer what you are comfortable sharing. Your answers are not saved or sent to anyone; they only filter the list." %}</p>
+  </header>
+  <div class="layout-2" style="margin-top:1rem">
+    <form class="card" method="get" hx-get="{% url 'programs:eligibility' %}" hx-target="#results" hx-push-url="true" data-stepper-form>
+      <ol class="stepper" data-stepper aria-hidden="true"><li>{% trans "About you" %}</li><li>{% trans "Your situation" %}</li></ol>
+      <div data-step>
+        {% for field in form.basic_fields %}
+        <div class="field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{{ field.errors }}</div>
+        {% endfor %}
+      </div>
+      <fieldset data-step style="border:0;padding:0;margin:0 0 1.25rem">
+        <legend style="font-weight:600;margin-bottom:.5rem">{% trans "Which of these apply to you?" %}</legend>
+        {% for field in form.flag_fields %}
+        <label class="check" for="{{ field.id_for_label }}">{{ field }} <span>{{ field.label }}</span></label>
+        {% endfor %}
+      </fieldset>
+      <button class="btn block">{% trans "Show my programs" %} <span class="htmx-indicator">…</span></button>
+    </form>
+    <div id="results" aria-live="polite">{% include "programs/_results.html" %}</div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{% static 'vendor/htmx.min.js' %}" defer></script>{% endblock %}

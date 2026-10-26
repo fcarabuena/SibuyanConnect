@@ -1,0 +1,113 @@
+{% load static i18n ui %}{% get_current_language as LANG %}{% with ns=request.resolver_match.namespace url_name=request.resolver_match.url_name %}<!doctype html>
+<html lang="{{ LANG }}" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>document.documentElement.className = "js";</script>
+  <title>{% block title %}{% trans "SibuyanConnect" %}{% endblock %} · Sibuyan Island</title>
+  <meta name="description" content="{% block description %}{% trans "Community portal of Magdiwang, San Fernando and Cajidiocan, Sibuyan Island, Romblon." %}{% endblock %}">
+  <meta name="theme-color" content="#1F5E46">
+  <link rel="manifest" href="{% url 'manifest' %}">
+  <link rel="icon" href="{% static 'icons/icon-192.png' %}">
+  <link rel="apple-touch-icon" href="{% static 'icons/icon-192.png' %}">
+  <link rel="alternate" type="application/rss+xml" title="SibuyanConnect News" href="{% url 'news:feed' %}">
+  <link rel="preload" href="{% static 'fonts/inter-latin-400-normal.woff2' %}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{% static 'fonts/fraunces-latin-500-normal.woff2' %}" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+  {% block head %}{% endblock %}
+</head>
+<body class="{% block body_class %}page{% endblock %}">
+<a class="skip-link" href="#main">{% trans "Skip to content" %}</a>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="{% url 'home' %}" aria-label="SibuyanConnect, home">{% include "_logo.html" %}<span>Sibuyan<b>Connect</b></span></a>
+    <button class="menu-btn" type="button" aria-controls="site-nav" aria-expanded="false" data-menu-open>{% icon "menu" %}<span class="visually-hidden">{% trans "Menu" %}</span></button>
+    <nav class="nav" id="site-nav" aria-label="{% trans 'Main' %}">
+      <button class="menu-btn nav-close" type="button" data-menu-close>{% icon "close" %}<span class="visually-hidden">{% trans "Close menu" %}</span></button>
+      <a href="{% url 'services:list' %}"{% if ns == 'services' %} aria-current="page"{% endif %}>{% trans "Services" %}</a>
+      <a href="{% url 'programs:list' %}"{% if ns == 'programs' %} aria-current="page"{% endif %}>{% trans "Programs" %}</a>
+      <a href="{% url 'concerns:new' %}"{% if ns == 'concerns' %} aria-current="page"{% endif %}>{% trans "Report a Concern" %}</a>
+      <a href="{% url 'tourism:attractions' %}"{% if ns == 'tourism' %} aria-current="page"{% endif %}>{% trans "Tourism" %}</a>
+      <a href="{% url 'news:list' %}"{% if ns == 'news' %} aria-current="page"{% endif %}>{% trans "News" %}</a>
+      <a href="{% url 'civic:transparency' %}"{% if ns == 'civic' %} aria-current="page"{% endif %}>{% trans "Transparency" %}</a>
+      <a class="nav-extra" href="{% url 'transport:board' %}">{% trans "Ferry & transport" %}</a>
+      <a class="nav-extra" href="{% url 'emergency:hub' %}">{% trans "Emergency hotlines" %}</a>
+      <a class="nav-extra" href="{% url 'assistant:chat' %}">{% trans "Help assistant" %}</a>
+      <form class="lang" action="{% url 'set-language' %}" method="post" aria-label="{% trans 'Language' %}">{% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+        <button name="language" value="en" aria-pressed="{% if LANG == 'en' %}true{% else %}false{% endif %}" title="English">EN</button>
+        <button name="language" value="fil" aria-pressed="{% if LANG == 'fil' %}true{% else %}false{% endif %}" title="Filipino">FIL</button>
+        <button name="language" value="rol" aria-pressed="{% if LANG == 'rol' %}true{% else %}false{% endif %}">Romblomanon</button>
+      </form>
+    </nav>
+    <div class="scrim" data-menu-close></div>
+  </div>
+</header>
+
+{% for a in live_alerts %}
+{% if forloop.counter == 2 %}<details class="more-alerts"><summary><span class="container">{% blocktrans count n=live_alerts|length|add:"-1" %}{{ n }} more alert{% plural %}{{ n }} more alerts{% endblocktrans %}</span></summary>{% endif %}
+<div class="alert-strip{% if a.level == 'danger' %} urgent{% endif %}" role="{% if a.level == 'danger' %}alert{% else %}status{% endif %}" data-alert="{{ a.pk }}-{{ a.updated_at|date:'U' }}">
+  <div class="container">
+    {% if a.level == 'danger' %}{% icon "alert" 20 %}{% else %}{% icon "info" 20 %}{% endif %}
+    <p><strong>{{ a.title }}</strong>{% if a.municipality %} · {{ a.municipality.name }}{% endif %}{% if a.body %}<span class="alert-body"> — {{ a.body|truncatewords:22 }}</span>{% endif %}{% if a.source_url %} <a href="{{ a.source_url }}" rel="noopener">{% trans "Source" %}</a>{% endif %}</p>
+    <button class="alert-dismiss" type="button" data-dismiss>{% icon "close" 18 %}<span class="visually-hidden">{% trans "Dismiss alert" %}</span></button>
+  </div>
+</div>
+{% if forloop.last and forloop.counter > 1 %}</details>{% endif %}
+{% endfor %}
+
+<main id="main" tabindex="-1">
+  {% if messages %}<div class="container"><ul class="messages" role="status">{% for m in messages %}<li class="{{ m.tags }}">{{ m }}</li>{% endfor %}</ul></div>{% endif %}
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <section>
+        <span class="footer-brand">{% include "_logo.html" %}SibuyanConnect</span>
+        <p>{% trans "Services, news and guidance from the Municipalities of Magdiwang, San Fernando and Cajidiocan, Sibuyan Island, Romblon." %}</p>
+        <p class="small">{% trans "Municipal halls: open Monday to Friday, 8:00 AM to 5:00 PM." %}<br><a href="{% url 'civic:transparency' %}#offices">{% trans "Offices and contacts" %}</a></p>
+      </section>
+      <section>
+        <h2>{% trans "Quick links" %}</h2>
+        <ul>
+          <li><a href="{% url 'services:list' %}">{% trans "Municipal services" %}</a></li>
+          <li><a href="{% url 'programs:eligibility' %}">{% trans "Check program eligibility" %}</a></li>
+          <li><a href="{% url 'concerns:track' %}">{% trans "Track a concern" %}</a></li>
+          <li><a href="{% url 'transport:board' %}">{% trans "Ferry schedule" %}</a></li>
+          <li><a href="{% url 'assistant:chat' %}">{% trans "Help assistant" %}</a></li>
+          <li><a href="{% url 'news:feed' %}">{% trans "News RSS feed" %}</a></li>
+        </ul>
+      </section>
+      <section>
+        <h2>{% trans "Emergency hotlines" %}</h2>
+        <ul>
+          {% for h in footer_hotlines %}<li>{{ h.name }}<a class="num" href="tel:{{ h.tel }}">{{ h.number }}</a></li>{% endfor %}
+          <li><a href="{% url 'emergency:hub' %}">{% trans "All hotlines and evacuation centers" %} →</a></li>
+        </ul>
+      </section>
+      <section>
+        <h2>{% trans "Government links" %}</h2>
+        <ul>
+          <li><a href="https://www.gov.ph/" rel="noopener">GOV.PH</a></li>
+          <li><a href="https://bagong.pagasa.dost.gov.ph/" rel="noopener">PAGASA</a></li>
+          <li><a href="https://www.phivolcs.dost.gov.ph/" rel="noopener">PHIVOLCS</a></li>
+          <li><a href="https://www.dswd.gov.ph/" rel="noopener">DSWD</a></li>
+          <li><a href="https://psa.gov.ph/" rel="noopener">Philippine Statistics Authority</a></li>
+          <li><a href="https://privacy.gov.ph/" rel="noopener">National Privacy Commission</a></li>
+        </ul>
+      </section>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 SibuyanConnect · {% trans "Prototype with sample data: verify details with your LGU." %}</p>
+      <p><a href="{% url 'privacy' %}">{% trans "Privacy notice" %}</a> · {% if user.is_authenticated %}<a href="{% url 'concerns:mine' %}">{% trans "My concerns" %}</a>{% else %}<a href="{% url 'login' %}">{% trans "Sign in" %}</a>{% endif %} · <a href="/admin/">{% trans "LGU staff" %}</a></p>
+    </div>
+  </div>
+</footer>
+
+<script src="{% static 'js/site.js' %}" defer></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>{% endwith %}

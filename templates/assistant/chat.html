@@ -1,0 +1,24 @@
+{% extends "base.html" %}{% load i18n static %}
+{% block title %}{% trans "Help Assistant" %}{% endblock %}
+{% block content %}
+<div class="container narrow">
+  <header class="page-head">
+    <p class="crumbs"><a href="{% url 'home' %}">{% trans "Home" %}</a> / {% trans "Help assistant" %}</p>
+    <h1>{% trans "Help assistant" %}</h1>
+    <p>{% trans "Ask in English, Filipino or Romblomanon about services, programs, ferries, tourism or emergencies." %}{% if not llm_enabled %} {% trans "Answers come from this site's own information." %}{% endif %}</p>
+  </header>
+  <div class="card" style="margin-top:1rem">
+    <div id="chat-log" class="chat-log" aria-live="polite">
+      <div class="bubble"><p>{% trans "Hello! Try: “How do I get a cedula?” or “Paano kumuha ng birth certificate?”" %}</p></div>
+      {% if question %}{% include "assistant/_reply.html" %}{% endif %}
+    </div>
+    <form method="post" class="search" hx-post="{% url 'assistant:chat' %}" hx-target="#chat-log" hx-swap="beforeend" hx-on::after-request="this.reset()">
+      {% csrf_token %}
+      <label for="ask-q" class="visually-hidden">{% trans "Your question" %}</label>
+      <input id="ask-q" type="text" name="q" required maxlength="500" placeholder="{% trans 'Type your question…' %}" autocomplete="off">
+      <button class="btn">{% trans "Ask" %}</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{% static 'vendor/htmx.min.js' %}" defer></script>{% endblock %}

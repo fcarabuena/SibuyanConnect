@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% trans "Create an account" %}{% endblock %}
+{% block content %}
+<div class="container narrow" style="padding-top:40px">
+<h1>{% trans "Create an account" %}</h1>
+<form method="post" class="card">
+  {% csrf_token %}
+  {% for field in form %}{% include "concerns/_field.html" with field=field %}{% endfor %}
+  <p class="meta">{% trans "By creating an account you agree to the" %} <a href="{% url 'privacy' %}">{% trans "Privacy Notice" %}</a>.</p>
+  <button class="btn block" style="margin-top:.5rem">{% trans "Create account" %}</button>
+</form>
+</div>
+{% endblock %}

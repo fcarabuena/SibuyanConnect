@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% trans "Sign in" %}{% endblock %}
+{% block content %}
+<div class="container narrow" style="padding-top:40px">
+<h1>{% trans "Sign in" %}</h1>
+<p class="meta">{% trans "An account is optional. It lets you see all your concerns in one place." %}</p>
+<form method="post" class="card">
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="form-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+  {% include "concerns/_field.html" with field=form.username %}
+  {% include "concerns/_field.html" with field=form.password %}
+  <input type="hidden" name="next" value="{{ next }}">
+  <button class="btn block" style="margin-top:.5rem">{% trans "Sign in" %}</button>
+</form>
+<p style="margin-top:1rem">{% trans "No account yet?" %} <a href="{% url 'signup' %}">{% trans "Create one" %}</a></p>
+</div>
+{% endblock %}

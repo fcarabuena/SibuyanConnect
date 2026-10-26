@@ -1,0 +1,10 @@
+{% load i18n %}<div class="card" style="margin-top:1rem">
+  <h3>{% blocktrans with name=service.name %}Your checklist: {{ name }}{% endblocktrans %}</h3>
+  <ul class="checklist">
+    {% for r in items %}
+    <li><label class="check"><input type="checkbox"> <span>{{ r.text }}{% if r.where_to_get %}<span class="meta"><br>{{ r.where_to_get }}</span>{% endif %}</span></label></li>
+    {% endfor %}
+  </ul>
+  <p class="meta">{% trans "Bring originals and one photocopy of each. Fee:" %} {{ service.fees|default:_("Free") }}</p>
+  <button type="button" class="btn ghost small no-print" onclick="window.print()">{% trans "Print" %}</button>
+</div>

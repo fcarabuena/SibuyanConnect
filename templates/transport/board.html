@@ -1,0 +1,59 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% trans "Ferry & Transport" %}{% endblock %}
+{% block content %}
+<div class="container">
+  <header class="page-head">
+    <p class="crumbs"><a href="{% url 'home' %}">{% trans "Home" %}</a> / {% trans "Ferry & transport" %}</p>
+    <h1>{% trans "Ferry and transport board" %}</h1>
+    <p>{% trans "Sailing status is updated by port and LGU staff. Always confirm with the shipping line before travelling, especially in bad weather." %}</p>
+    {% include "_town_pills.html" %}
+  </header>
+
+  <section aria-labelledby="trips-h" style="margin-top:2rem">
+    <h2 id="trips-h" style="font-size:1.5rem">{% trans "Sailings: next 3 days" %}</h2>
+    <div class="card table-wrap">
+      <table>
+        <thead><tr><th>{% trans "Date and time" %}</th><th>{% trans "Route" %}</th><th>{% trans "Status" %}</th></tr></thead>
+        <tbody>
+        {% for t in trips %}
+          <tr>
+            <td><strong>{{ t.departure_date|date:"D M j" }}</strong><br>{{ t.departure_time|time:"g:i A" }}</td>
+            <td>{{ t.route.origin }} → {{ t.route.destination }}<br><span class="meta">{{ t.route.operator }} · {{ t.route.port }}</span></td>
+            <td><span class="badge status-{{ t.status }}">{{ t.get_status_display }}</span>{% if t.status_note %}<br><span class="meta">{{ t.status_note }}</span>{% endif %}<br><span class="meta">{% trans "updated" %} {{ t.updated_at|date:"M j g:i A" }}</span></td>
+          </tr>
+        {% empty %}<tr><td colspan="3">{% trans "No sailings listed." %}</td></tr>{% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="routes-h" style="margin-top:2.5rem">
+    <h2 id="routes-h" style="font-size:1.5rem">{% trans "Ferry routes" %}</h2>
+    <div class="grid sm-2 md-3">
+    {% for r in routes %}
+      <div class="card">
+        <h3>{{ r.origin }} ↔ {{ r.destination }}</h3>
+        <p class="meta" style="margin:0">{{ r.operator }}{% if r.vessel %} · {{ r.vessel }}{% endif %}<br>{{ r.schedule_text }}{% if r.duration %} · {{ r.duration }}{% endif %}<br>{% if r.fare_info %}{{ r.fare_info }}<br>{% endif %}{{ r.port }}, {{ r.municipality.name }}</p>
+      </div>
+    {% endfor %}
+    </div>
+  </section>
+
+  <div class="grid cols-2" style="margin-top:2.5rem">
+    <section aria-labelledby="jeep-h">
+      <h2 id="jeep-h" style="font-size:1.5rem">{% trans "Jeepney trips between towns" %}</h2>
+      <div class="card table-wrap"><table>
+        <thead><tr><th>{% trans "Departs" %}</th><th>{% trans "Route" %}</th><th>{% trans "Fare" %}</th></tr></thead>
+        <tbody>{% for j in jeepneys %}<tr><td>{{ j.departure_time|time:"g:i A" }}<br><span class="meta">{{ j.days }}</span></td><td>{{ j.origin }} → {{ j.destination }}<br><span class="meta">{{ j.terminal }}</span></td><td>{% if j.fare %}₱{{ j.fare|floatformat:"-2" }}{% endif %}</td></tr>{% endfor %}</tbody>
+      </table></div>
+    </section>
+    <section aria-labelledby="trike-h">
+      <h2 id="trike-h" style="font-size:1.5rem">{% trans "Tricycle fare guide" %}</h2>
+      <div class="card table-wrap"><table>
+        <thead><tr><th>{% trans "From → to" %}</th><th>{% trans "Regular" %}</th><th>{% trans "Discounted" %}</th><th>{% trans "Special" %}</th></tr></thead>
+        <tbody>{% for f in fares %}<tr><td>{{ f.from_point }} → {{ f.to_point }}{% if f.ordinance %}<br><span class="meta">{{ f.ordinance }}</span>{% endif %}</td><td>₱{{ f.regular_fare|floatformat:"-2" }}</td><td>{% if f.discounted_fare %}₱{{ f.discounted_fare|floatformat:"-2" }}{% endif %}</td><td>{% if f.special_trip_fare %}₱{{ f.special_trip_fare|floatformat:"-2" }}{% endif %}</td></tr>{% endfor %}</tbody>
+      </table></div>
+    </section>
+  </div>
+</div>
+{% endblock %}

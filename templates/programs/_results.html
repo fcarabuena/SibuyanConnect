@@ -1,0 +1,18 @@
+{% load i18n %}{% if results is not None %}
+<h2 style="font-size:1.5rem">{% blocktrans count n=results|length %}{{ n }} program you may qualify for{% plural %}{{ n }} programs you may qualify for{% endblocktrans %}</h2>
+<div class="stack">
+{% for r in results %}
+<a class="card card-link" href="{{ r.program.get_absolute_url }}">
+  <span class="tag">{{ r.program.get_kind_display }}</span> <span class="tag blue">{{ r.program.agency }}</span>
+  <h3 style="margin:.6rem 0 .3rem">{{ r.program.name }}</h3>
+  <p class="meta" style="margin-bottom:.3rem">{{ r.program.summary|truncatewords:24 }}</p>
+  {% if r.reasons %}<p class="meta" style="margin:0;color:var(--green)">✓ {{ r.reasons|join:" · " }}</p>{% endif %}
+</a>
+{% empty %}
+<p>{% trans "No programs matched. Try leaving some answers blank, or ask your MSWDO for help." %}</p>
+{% endfor %}
+</div>
+<div class="note">{% trans "This is a guide only. Final eligibility is decided by the implementing office after checking your documents." %}</div>
+{% else %}
+<div class="note mint"><p style="margin:0">{% trans "Your matching programs will appear here." %}</p></div>
+{% endif %}

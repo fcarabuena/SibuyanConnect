@@ -1,0 +1,19 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block description %}{{ post.summary }}{% endblock %}
+{% block content %}
+<article class="container narrow">
+  <header class="page-head">
+    <p class="crumbs"><a href="{% url 'news:list' %}">{% trans "News" %}</a> / {{ post.get_category_display }}</p>
+    <h1>{{ post.title }}</h1>
+    <p class="meta">{{ post.published_at|date:"F j, Y" }} · {{ post.municipality.name|default:_("All towns") }}</p>
+  </header>
+  {% if post.image %}<img src="{{ post.image.url }}" alt="" loading="lazy" style="border-radius:12px;margin:1rem 0">{% endif %}
+  <div style="margin-top:1rem;font-size:1.05rem">{{ post.body|linebreaks }}</div>
+  <div class="actions">
+    <button type="button" class="btn ghost small" data-share data-title="{{ post.title }}" data-copied="{% trans 'Link copied' %}">{% trans "Share" %}</button>
+    <a class="btn ghost small" href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}" rel="noopener" target="_blank">Facebook</a>
+    <a class="btn ghost small" href="sms:?body={{ post.title|urlencode }}%20{{ request.build_absolute_uri|urlencode }}">SMS</a>
+  </div>
+</article>
+{% endblock %}

@@ -1,0 +1,359 @@
+# Filipino UI strings for SibuyanConnect.
+# Content (services, programs, FAQ) is translated in the admin via django-modeltranslation.
+# To add strings: copy msgids exactly from the templates, then run
+#   python manage.py compile_translations
+msgid ""
+msgstr ""
+"Language: fil\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "Home"
+msgstr "Home"
+
+msgid "News"
+msgstr "Balita"
+
+msgid "Services"
+msgstr "Serbisyo"
+
+msgid "Programs"
+msgstr "Programa"
+
+msgid "Report a Concern"
+msgstr "Mag-ulat ng Problema"
+
+msgid "Report"
+msgstr "Mag-ulat"
+
+msgid "Ferry & Transport"
+msgstr "Barko at Sasakyan"
+
+msgid "Ferry"
+msgstr "Barko"
+
+msgid "Ferry Schedule"
+msgstr "Iskedyul ng Barko"
+
+msgid "Emergency"
+msgstr "Emergency"
+
+msgid "Hotlines"
+msgstr "Hotline"
+
+msgid "Ask"
+msgstr "Magtanong"
+
+msgid "All towns"
+msgstr "Lahat ng bayan"
+
+msgid "Go"
+msgstr "Tuloy"
+
+msgid "Skip to content"
+msgstr "Lumaktaw sa nilalaman"
+
+msgid "Sibuyan Island, Romblon"
+msgstr "Isla ng Sibuyan, Romblon"
+
+msgid "Mabuhay, Sibuyanon!"
+msgstr "Mabuhay, Sibuyanon!"
+
+msgid "Services, programs and help from your LGU — in one place, even on weak signal."
+msgstr "Serbisyo, programa at tulong mula sa inyong LGU — sa iisang lugar, kahit mahina ang signal."
+
+msgid "Pinned advisories"
+msgstr "Mahahalagang abiso"
+
+msgid "News & Updates"
+msgstr "Balita at Abiso"
+
+msgid "All news"
+msgstr "Lahat ng balita"
+
+msgid "Weather now"
+msgstr "Panahon ngayon"
+
+msgid "Sailings today"
+msgstr "Biyahe ng barko ngayon"
+
+msgid "Board"
+msgstr "Tingnan"
+
+msgid "Most-used services"
+msgstr "Pinakaginagamit na serbisyo"
+
+msgid "Ask the Help Assistant"
+msgstr "Magtanong sa Help Assistant"
+
+msgid "Municipal Services"
+msgstr "Mga Serbisyo ng Munisipyo"
+
+msgid "Search"
+msgstr "Hanapin"
+
+msgid "All"
+msgstr "Lahat"
+
+msgid "Free"
+msgstr "Libre"
+
+msgid "Office"
+msgstr "Opisina"
+
+msgid "Fees"
+msgstr "Bayad"
+
+msgid "Processing time"
+msgstr "Tagal ng proseso"
+
+msgid "Office hours"
+msgstr "Oras ng opisina"
+
+msgid "Who may apply"
+msgstr "Sino ang puwedeng mag-apply"
+
+msgid "Where"
+msgstr "Saan"
+
+msgid "Requirements"
+msgstr "Mga kailangan"
+
+msgid "Steps"
+msgstr "Mga hakbang"
+
+msgid "What do I need?"
+msgstr "Ano ang kailangan ko?"
+
+msgid "Answer these and get a checklist you can print or screenshot."
+msgstr "Sagutin ito para makakuha ng checklist na puwedeng i-print o i-screenshot."
+
+msgid "Yes"
+msgstr "Oo"
+
+msgid "No"
+msgstr "Hindi"
+
+msgid "Make my checklist"
+msgstr "Gawin ang checklist ko"
+
+msgid "Print"
+msgstr "I-print"
+
+msgid "Share"
+msgstr "Ibahagi"
+
+msgid "Programs & Assistance"
+msgstr "Mga Programa at Tulong"
+
+msgid "Which programs can I get?"
+msgstr "Anong mga programa ang puwede sa akin?"
+
+msgid "Show my programs"
+msgstr "Ipakita ang mga programa ko"
+
+msgid "Where do you live?"
+msgstr "Saan ka nakatira?"
+
+msgid "Your age"
+msgstr "Edad mo"
+
+msgid "Household monthly income"
+msgstr "Buwanang kita ng pamilya"
+
+msgid "Which of these apply to you?"
+msgstr "Alin sa mga ito ang totoo sa iyo?"
+
+msgid "Report a Concern / Ask Your LGU"
+msgstr "Mag-ulat ng Problema / Magtanong sa LGU"
+
+msgid "What is the concern?"
+msgstr "Ano ang problema?"
+
+msgid "Where?"
+msgstr "Saan?"
+
+msgid "How can we reach you?"
+msgstr "Paano ka namin makokontak?"
+
+msgid "Send concern"
+msgstr "Ipadala"
+
+msgid "Data privacy"
+msgstr "Privacy ng datos"
+
+msgid "Read the Privacy Notice"
+msgstr "Basahin ang Privacy Notice"
+
+msgid "Track a concern"
+msgstr "Subaybayan ang concern"
+
+msgid "Ticket number"
+msgstr "Ticket number"
+
+msgid "Messages with the office"
+msgstr "Mga mensahe sa opisina"
+
+msgid "Send message"
+msgstr "Ipadala ang mensahe"
+
+msgid "Emergency & Disaster Hub"
+msgstr "Emergency at Sakuna"
+
+msgid "Evacuation centers"
+msgstr "Mga evacuation center"
+
+msgid "Be prepared"
+msgstr "Maging handa"
+
+msgid "Help Assistant"
+msgstr "Help Assistant"
+
+msgid "Ask LGU staff"
+msgstr "Magtanong sa kawani ng LGU"
+
+msgid "Privacy Notice"
+msgstr "Privacy Notice"
+
+msgid "Sign in"
+msgstr "Mag-sign in"
+
+msgid "My concerns"
+msgstr "Aking mga concern"
+
+msgid "Prototype."
+msgstr "Prototype."
+
+msgid "English"
+msgstr "English"
+
+msgid "Filipino"
+msgstr "Filipino"
+
+msgid "Romblomanon"
+msgstr "Romblomanon"
+
+msgid "Services, news and guidance for Sibuyan"
+msgstr "Serbisyo, balita at gabay para sa Sibuyan"
+
+msgid "Your municipal government, in one calm place: even on a weak signal."
+msgstr "Ang inyong pamahalaang bayan, sa iisang lugar: kahit mahina ang signal."
+
+msgid "What do you need? e.g. birth certificate, cedula"
+msgstr "Ano ang kailangan mo? hal. birth certificate, cedula"
+
+msgid "How can we help?"
+msgstr "Paano kami makatutulong?"
+
+msgid "Requirements, fees and steps for the services residents ask about most."
+msgstr "Mga kailangan, bayad at hakbang para sa mga serbisyong madalas itanong."
+
+msgid "Civil Registry"
+msgstr "Rehistro Sibil"
+
+msgid "Permits & Clearances"
+msgstr "Mga Permit at Clearance"
+
+msgid "Social Welfare"
+msgstr "Kapakanang Panlipunan"
+
+msgid "Health"
+msgstr "Kalusugan"
+
+msgid "Agriculture"
+msgstr "Agrikultura"
+
+msgid "All services"
+msgstr "Lahat ng serbisyo"
+
+msgid "Municipal government"
+msgstr "Pamahalaang bayan"
+
+msgid "Today on Sibuyan"
+msgstr "Ngayong araw sa Sibuyan"
+
+msgid "Weather"
+msgstr "Panahon"
+
+msgid "Ferry status"
+msgstr "Lagay ng biyahe"
+
+msgid "Emergency hotlines"
+msgstr "Mga emergency hotline"
+
+msgid "Feels like"
+msgstr "Pakiramdam"
+
+msgid "Humidity"
+msgstr "Halumigmig"
+
+msgid "Wind"
+msgstr "Hangin"
+
+msgid "Rain chance"
+msgstr "Tsansa ng ulan"
+
+msgid "Programs and assistance"
+msgstr "Mga programa at tulong"
+
+msgid "Check what you qualify for"
+msgstr "Alamin kung saan ka kwalipikado"
+
+msgid "Transparency"
+msgstr "Transparency"
+
+msgid "Bids & procurement"
+msgstr "Bidding at procurement"
+
+msgid "Financial reports"
+msgstr "Mga ulat pinansyal"
+
+msgid "View all"
+msgstr "Tingnan lahat"
+
+msgid "Latest news"
+msgstr "Pinakabagong balita"
+
+msgid "Read more"
+msgstr "Basahin pa"
+
+msgid "Discover Sibuyan"
+msgstr "Tuklasin ang Sibuyan"
+
+msgid "Explore attractions"
+msgstr "Tingnan ang mga pasyalan"
+
+msgid "Tourism"
+msgstr "Turismo"
+
+msgid "Quick links"
+msgstr "Mabilis na link"
+
+msgid "Government links"
+msgstr "Mga link ng gobyerno"
+
+msgid "Showing:"
+msgstr "Ipinapakita:"
+
+msgid "The Galápagos of Asia"
+msgstr "Ang Galápagos ng Asya"
+
+msgid "Did you know?"
+msgstr "Alam mo ba?"
+
+msgid "Photo needed"
+msgstr "Kailangan ng larawan"
+
+msgid "Best time to visit"
+msgstr "Pinakamainam na panahon ng pagbisita"
+
+msgid "How to get there"
+msgstr "Paano pumunta"
+
+msgid "Map of attractions"
+msgstr "Mapa ng mga pasyalan"
+
+msgid "Travel responsibly"
+msgstr "Maglakbay nang responsable"

@@ -1,0 +1,62 @@
+{% extends "base.html" %}{% load i18n ui %}
+{% block title %}{% trans "Emergency & Disaster Hub" %}{% endblock %}
+{% block content %}
+<div class="container">
+  <header class="page-head">
+    <p class="crumbs"><a href="{% url 'home' %}">{% trans "Home" %}</a> / {% trans "Emergency" %}</p>
+    <h1>{% trans "Emergency and disaster hub" %}</h1>
+    <p>{% trans "This page works offline once you have opened it. Tap a number to call." %}</p>
+    {% include "_town_pills.html" %}
+  </header>
+
+  <div class="layout-2" style="margin-top:2rem">
+    <section class="card" aria-labelledby="hot-h">
+      <h2 id="hot-h" style="font-size:1.5rem">{% trans "Hotlines" %}</h2>
+      <ul class="rows">
+        {% for h in hotlines %}
+        <li><span><strong>{{ h.name }}</strong><span class="meta">{{ h.get_agency_display }}{% if h.municipality %} · {{ h.municipality.name }}{% endif %}{% if h.is_24h %} · 24/7{% endif %}{% if not h.is_verified %} · {% trans "unverified sample" %}{% endif %}</span></span>
+          <a class="call{% if h.agency == 'national' %} urgent{% endif %}" href="tel:{{ h.tel }}" aria-label="{% blocktrans with n=h.name %}Call {{ n }}{% endblocktrans %}">{% icon "phone" 16 %}{{ h.number }}</a></li>
+        {% endfor %}
+      </ul>
+    </section>
+    <section class="card flat" aria-labelledby="wx-h">
+      <h2 id="wx-h" style="font-size:1.4rem">{% trans "Weather now" %}</h2>
+      <div id="weather" data-lat="{{ weather_lat }}" data-lon="{{ weather_lon }}" data-offline="{% trans 'Weather is unavailable offline.' %}">
+        <div class="temp" data-w="temp" aria-live="polite">—</div>
+        <p class="weather-desc" data-w="desc">{% trans "Loading…" %}</p>
+        <div class="boxes">
+          <div class="box" style="background:#fff"><span>{% trans "Feels like" %}</span><strong data-w="feels">—</strong></div>
+          <div class="box" style="background:#fff"><span>{% trans "Humidity" %}</span><strong data-w="humidity">—</strong></div>
+          <div class="box" style="background:#fff"><span>{% trans "Wind" %}</span><strong data-w="wind">—</strong></div>
+          <div class="box" style="background:#fff"><span>{% trans "Rain chance" %}</span><strong data-w="rain">—</strong></div>
+        </div>
+      </div>
+      <ul style="margin:1rem 0 0;padding-left:1.1rem">
+        <li><a href="https://bagong.pagasa.dost.gov.ph/tropical-cyclone/severe-weather-bulletin" rel="noopener">{% trans "PAGASA tropical cyclone bulletins" %}</a></li>
+        <li><a href="https://bagong.pagasa.dost.gov.ph/regional-forecast/visayasprsd" rel="noopener">{% trans "PAGASA regional forecasts" %}</a></li>
+        <li><a href="https://www.phivolcs.dost.gov.ph/" rel="noopener">{% trans "PHIVOLCS earthquake information" %}</a></li>
+      </ul>
+    </section>
+  </div>
+
+  <section aria-labelledby="evac-h" style="margin-top:2.5rem">
+    <h2 id="evac-h" style="font-size:1.5rem">{% trans "Evacuation centers" %}</h2>
+    <div class="card table-wrap"><table>
+      <thead><tr><th>{% trans "Barangay" %}</th><th>{% trans "Center" %}</th><th>{% trans "Capacity" %}</th></tr></thead>
+      <tbody>{% for c in centers %}<tr><td>{{ c.barangay.name }}<br><span class="meta">{{ c.barangay.municipality.name }}</span></td><td>{{ c.name }}{% if c.facilities %}<br><span class="meta">{{ c.facilities }}</span>{% endif %}</td><td>{{ c.capacity|default:"—" }}</td></tr>{% endfor %}</tbody>
+    </table></div>
+  </section>
+
+  <section aria-labelledby="guide-h" style="margin-top:2.5rem">
+    <h2 id="guide-h" style="font-size:1.5rem">{% trans "Be prepared" %}</h2>
+    <div class="stack">
+    {% for g in guides %}
+    <details class="card">
+      <summary style="min-height:var(--tap);display:flex;align-items:center;font-weight:600;cursor:pointer">{{ g.title }}</summary>
+      <ul class="checklist" style="margin-top:.5rem">{% for tip in g.tips %}<li>{{ tip }}</li>{% endfor %}</ul>
+    </details>
+    {% endfor %}
+    </div>
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% trans "My concerns" %}{% endblock %}
+{% block content %}
+<div class="container narrow">
+  <header class="page-head"><h1>{% trans "My concerns" %}</h1></header>
+  <div class="stack" style="margin-top:1rem">
+  {% for c in concerns %}
+  <a class="card card-link" href="{{ c.get_absolute_url }}">
+    <span class="badge {% if c.status == 'resolved' %}ok{% else %}warn{% endif %}">{{ c.get_status_display }}</span>
+    <span class="meta">{{ c.ticket_number }} · {{ c.created_at|date:"M j, Y" }}</span>
+    <h3 style="margin:.5rem 0 .25rem">{{ c.subject }}</h3>
+    <p class="meta" style="margin:0">{{ c.category.name }} → {{ c.office.name|default:"—" }}</p>
+  </a>
+  {% empty %}
+  <p>{% trans "You have not filed any concerns while signed in." %}</p>
+  {% endfor %}
+  </div>
+  <div class="actions"><a class="btn" href="{% url 'concerns:new' %}">{% trans "Report a concern" %}</a>
+  <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="btn ghost">{% trans "Sign out" %}</button></form></div>
+</div>
+{% endblock %}

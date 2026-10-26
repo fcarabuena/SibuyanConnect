@@ -1,0 +1,19 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% trans "Track a concern" %}{% endblock %}
+{% block content %}
+<div class="container narrow">
+  <header class="page-head">
+    <p class="crumbs"><a href="{% url 'home' %}">{% trans "Home" %}</a> / {% trans "Track a concern" %}</p>
+    <h1>{% trans "Track a concern" %}</h1>
+    <p>{% trans "Enter your ticket number and the email or mobile number you used." %}</p>
+  </header>
+  <form method="post" class="card" style="margin-top:1rem">
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="form-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+    {% include "concerns/_field.html" with field=form.ticket_number %}
+    {% include "concerns/_field.html" with field=form.contact %}
+    <button class="btn block">{% trans "Find my concern" %}</button>
+  </form>
+  {% if user.is_authenticated %}<p style="margin-top:1rem"><a href="{% url 'concerns:mine' %}">{% trans "See all my concerns" %}</a></p>{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% trans "You are offline" %}{% endblock %}
+{% block content %}
+<div class="container narrow" style="padding-top:40px">
+<h1>{% trans "You are offline" %}</h1>
+<p>{% trans "This page has not been saved on your phone yet. These pages work without signal:" %}</p>
+<ul>
+  <li><a href="{% url 'emergency:hub' %}">{% trans "Emergency hotlines & evacuation centers" %}</a></li>
+  <li><a href="{% url 'transport:board' %}">{% trans "Ferry & transport schedules (last saved copy)" %}</a></li>
+  <li><a href="{% url 'services:list' %}">{% trans "Municipal services" %}</a></li>
+</ul>
+<p class="note">{% trans "In an emergency, dial 911. Calls work even without mobile data." %}</p>
+</div>
+{% endblock %}

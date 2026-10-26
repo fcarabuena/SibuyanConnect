@@ -1,0 +1,50 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{{ concern.ticket_number }}{% endblock %}
+{% block head %}<meta name="robots" content="noindex">{% endblock %}
+{% block content %}
+<div class="container narrow">
+  <header class="page-head">
+    <p class="crumbs">{% trans "Ticket number" %}</p>
+    <p class="ticket-no">{{ concern.ticket_number }}</p>
+    <p class="meta">{% trans "Save this page or the link we emailed you. Anyone with the link can read this ticket, so keep it private." %}</p>
+  </header>
+
+  <section class="card" style="margin-top:1rem">
+    <h1 style="font-size:1.6rem">{{ concern.subject }}</h1>
+    <ol class="tracker" aria-label="{% trans 'Status' %}">
+      {% for step in concern.tracker %}
+      <li class="{% if step.done %}done{% endif %}{% if step.current %} current{% endif %}"{% if step.current %} aria-current="step"{% endif %}>{{ step.label }}</li>
+      {% endfor %}
+    </ol>
+    <dl class="facts">
+      <div><dt>{% trans "Routed to" %}</dt><dd>{{ concern.office.name|default:_("Mayor's Office") }}</dd></div>
+      <div><dt>{% trans "Category" %}</dt><dd>{{ concern.category.name }}</dd></div>
+      <div><dt>{% trans "Location" %}</dt><dd>{{ concern.barangay }}{% if concern.location_detail %} — {{ concern.location_detail }}{% endif %}</dd></div>
+      <div><dt>{% trans "Filed" %}</dt><dd>{{ concern.created_at|date:"M j, Y g:i A" }}</dd></div>
+    </dl>
+    <p>{{ concern.description|linebreaksbr }}</p>
+    {% if concern.photo %}<img src="{{ concern.photo.url }}" alt="{% trans 'Photo attached to the concern' %}" loading="lazy" style="border-radius:8px;max-height:320px">{% endif %}
+  </section>
+
+  <section aria-labelledby="thread-h" style="margin-top:2rem">
+    <h2 id="thread-h" style="font-size:1.5rem">{% trans "Messages with the office" %}</h2>
+    <div class="thread">
+      {% for m in thread %}
+      <div class="msg {{ m.sender }}">
+        {% if m.sender != "system" %}<div class="meta">{% if m.sender == "staff" %}{{ concern.office.name|default:_("LGU staff") }}{% else %}{% trans "You" %}{% endif %} · {{ m.created_at|date:"M j, g:i A" }}</div>{% endif %}
+        <p>{{ m.body }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% if concern.status != "resolved" %}
+    <form method="post" class="card" style="margin-top:1rem">
+      {% csrf_token %}
+      {% include "concerns/_field.html" with field=form.body %}
+      <button class="btn">{% trans "Send message" %}</button>
+    </form>
+    {% else %}
+    <div class="note">{% trans "This concern is resolved. If the problem returns, please file a new concern." %} <a href="{% url 'concerns:new' %}">{% trans "Report a concern" %}</a></div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

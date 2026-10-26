@@ -1,0 +1,43 @@
+{% extends "base.html" %}{% load i18n ui %}
+{% block title %}{% trans "Programs & Assistance" %}{% endblock %}
+{% block content %}
+<div class="container">
+  <header class="page-head">
+    <p class="crumbs"><a href="{% url 'home' %}">{% trans "Home" %}</a> / {% trans "Programs" %}</p>
+    <h1>{% trans "Programs and assistance" %}</h1>
+    <p>{% trans "Municipal, provincial and national programs available to Sibuyan residents." %}</p>
+    {% include "_town_pills.html" %}
+  </header>
+
+  <div class="note mint" style="display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;margin:1.5rem 0">
+    <div><h2 style="font-size:1.4rem;margin:0">{% trans "Which programs can I get?" %}</h2>
+    <p class="meta" style="margin:0">{% trans "Answer a few questions to see programs you may qualify for. Nothing you enter is saved." %}</p></div>
+    <a class="btn" href="{% url 'programs:eligibility' %}">{% trans "Check what you qualify for" %}</a>
+  </div>
+
+  {% if schedules %}
+  <section aria-labelledby="sched-h" style="margin-bottom:2rem">
+    <h2 id="sched-h" style="font-size:1.5rem">{% trans "Application schedules" %}</h2>
+    <ul class="list-links">
+      {% for s in schedules %}
+      <li><a href="{{ s.program.get_absolute_url }}"><span>{{ s.title }} — {{ s.program.name }}<span class="meta">{{ s.opens_on|date:"M j" }}{% if s.closes_on %} – {{ s.closes_on|date:"M j, Y" }}{% endif %}{% if s.venue %} · {{ s.venue }}{% endif %}</span></span>{% if s.is_open %}<span class="badge ok">{% trans "Open now" %}</span>{% else %}<span class="badge warn">{% trans "Upcoming" %}</span>{% endif %}</a></li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <nav class="chips" aria-label="{% trans 'Program types' %}">
+    <a class="pill" href="?" aria-current="{% if not active_kind %}true{% else %}false{% endif %}">{% trans "All" %}</a>
+    {% for value, label in kinds %}<a class="pill" href="?kind={{ value }}" aria-current="{% if active_kind == value %}true{% else %}false{% endif %}">{{ label }}</a>{% endfor %}
+  </nav>
+  <div class="grid sm-2 md-3" style="margin-top:.5rem">
+    {% for p in programs %}
+    <a class="card card-link" href="{{ p.get_absolute_url }}">
+      <span class="tag">{{ p.get_kind_display }}</span> <span class="tag blue">{{ p.agency }}</span>
+      <h3 style="margin:.75rem 0 .35rem">{{ p.name }}</h3>
+      <p class="meta" style="margin:0">{{ p.summary|truncatewords:20 }}</p>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

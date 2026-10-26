@@ -1,0 +1,25 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% trans "News & Updates" %}{% endblock %}
+{% block content %}
+<div class="container">
+  <header class="page-head">
+    <p class="crumbs"><a href="{% url 'home' %}">{% trans "Home" %}</a> / {% trans "News" %} · <a href="{% url 'news:feed' %}">RSS</a></p>
+    <h1>{% trans "News and updates" %}</h1>
+    <p>{% trans "Announcements and advisories from the three towns." %}</p>
+    {% include "_town_pills.html" %}
+  </header>
+  <nav class="chips" aria-label="{% trans 'Categories' %}" style="margin-top:1.5rem">
+    <a class="pill" href="?" aria-current="{% if not active_category %}true{% else %}false{% endif %}">{% trans "All" %}</a>
+    {% for value, label in categories %}<a class="pill" href="?category={{ value }}" aria-current="{% if active_category == value %}true{% else %}false{% endif %}">{{ label }}</a>{% endfor %}
+  </nav>
+  <div class="grid sm-2 md-3" style="margin-top:.5rem">
+    {% for p in page %}{% include "news/_card.html" with post=p %}{% empty %}<p>{% trans "No news yet." %}</p>{% endfor %}
+  </div>
+  {% if page.has_other_pages %}
+  <nav class="actions" aria-label="{% trans 'Pages' %}">
+    {% if page.has_previous %}<a class="btn ghost small" href="?page={{ page.previous_page_number }}{% if active_category %}&amp;category={{ active_category }}{% endif %}">← {% trans "Newer" %}</a>{% endif %}
+    {% if page.has_next %}<a class="btn ghost small" href="?page={{ page.next_page_number }}{% if active_category %}&amp;category={{ active_category }}{% endif %}">{% trans "Older" %} →</a>{% endif %}
+  </nav>
+  {% endif %}
+</div>
+{% endblock %}

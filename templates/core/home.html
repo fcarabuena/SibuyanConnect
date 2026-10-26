@@ -1,0 +1,202 @@
+{% extends "base.html" %}{% load i18n static ui %}
+{% block title %}{% trans "Home" %}{% endblock %}
+{% block body_class %}home{% endblock %}
+{% block head %}<link rel="preload" as="image" href="{{ hero_m.src }}" media="(max-width: 599px)" type="image/webp">
+<link rel="preload" as="image" imagesrcset="{{ hero.srcset }}" imagesizes="100vw" media="(min-width: 600px)" type="image/webp">{% endblock %}
+{% block content %}
+<section class="hero-full" aria-labelledby="hero-h">
+  <div class="hero-media" data-hero data-slides="{{ hero_slides }}">
+    <picture>
+      <source media="(max-width: 599px)" srcset="{{ hero_m.src }}" width="{{ hero_m.width }}" height="{{ hero_m.height }}">
+      <img class="hero-slide is-active" src="{{ hero.src }}" srcset="{{ hero.srcset }}" sizes="100vw" width="{{ hero.width }}" height="{{ hero.height }}" alt="{{ hero.alt }}" fetchpriority="high" decoding="async">
+    </picture>
+    <span class="photo-credit hero-credit">{% trans "Photo:" %} <a href="{{ hero.source }}" rel="noopener" data-hero-credit>{{ hero.credit }}</a></span>
+  </div>
+  <div class="hero-text container">
+    <p class="hero-tagline">{% trans "The Galápagos of Asia" %}</p>
+    <h1 id="hero-h">{% trans "Services, news and guidance for Sibuyan" %}</h1>
+    <p class="lead">{% if current_town and current_town.tagline %}{{ current_town.name }} · {{ current_town.tagline }}. {% endif %}{% trans "Your municipal government, in one calm place: even on a weak signal." %}</p>
+  </div>
+  <div class="hero-controls container">
+    <label for="hero-q" class="hero-label">{% trans "What do you need?" %}</label>
+    <form class="search" action="{% url 'services:list' %}" method="get" role="search">
+      {% icon "search" 20 %}
+      <input id="hero-q" type="search" name="q" placeholder="{% trans 'e.g. birth certificate, cedula' %}">
+      <button class="btn">{% trans "Search" %}</button>
+    </form>
+    <div class="actions">
+      <a class="btn" href="{% url 'concerns:new' %}">{% trans "Report a Concern" %}</a>
+      <a class="btn outline on-photo" href="{% url 'transport:board' %}">{% icon "ship" 20 %}{% trans "Ferry Schedule" %}</a>
+    </div>
+  </div>
+</section>
+<div class="container">{% include "_town_pills.html" %}</div>
+
+<section class="section" aria-labelledby="help-h">
+  <div class="container">
+    <div class="section-head">
+      <div><h2 id="help-h">{% trans "How can we help?" %}</h2><p>{% trans "Requirements, fees and steps for the services residents ask about most." %}</p></div>
+    </div>
+    <div class="grid sm-2 md-3">
+      {% for t in tiles %}
+      <a class="tile" href="{{ t.url }}">
+        {% icon t.icon 28 %}
+        <h3>{{ t.title }}</h3>
+        <span class="count">{% blocktrans count n=t.count %}{{ n }} service{% plural %}{{ n }} services{% endblocktrans %}</span>
+        <p>{{ t.text }}</p>
+        <span class="go" aria-hidden="true">{% icon "arrow" 18 %}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% include "_divider.html" with shape="ridge" tone="mint" %}
+<section class="section tint-mint patterned discover" aria-labelledby="disc-h">
+  <div class="container">
+    <div class="section-head">
+      <div><h2 id="disc-h">{% trans "Discover Sibuyan" %}</h2>
+      <p>{% trans "Untouched forest from summit to shore, rivers clear enough to drink from, and plants and animals found nowhere else on Earth." %}</p></div>
+      <a class="text-link" href="{% url 'tourism:attractions' %}">{% trans "Explore attractions" %} {% icon "arrow-right" 18 %}</a>
+    </div>
+    <div class="bento">
+      {% for t in discover %}
+      <a class="bento-tile zoom{% if not t.photo %} placeholder{% endif %}" href="{% url 'tourism:attractions' %}{% if t.anchor != 'coast' %}#{{ t.anchor }}{% endif %}">
+        {% if t.photo %}
+        <img src="{{ t.photo.src }}" srcset="{{ t.photo.srcset }}" sizes="{% if forloop.first %}(min-width: 900px) 760px, 100vw{% elif forloop.last %}(min-width: 900px) 380px, 100vw{% else %}(min-width: 900px) 380px, 50vw{% endif %}" width="{{ t.photo.width }}" height="{{ t.photo.height }}" alt="{{ t.photo.alt }}" loading="lazy" decoding="async">
+        {% else %}
+        <span class="ph-mark">{% icon "camera" 20 %}<span>{% trans "Photo needed" %}</span></span>
+        {% endif %}
+        <span class="bento-caption"><strong>{{ t.name }}</strong><span>{{ t.town }}</span></span>
+      </a>
+      {% endfor %}
+    </div>
+    <p class="credits-line">{% trans "Photos:" %} {% for t in discover %}{% if t.photo %}<a href="{{ t.photo.source }}" rel="noopener">{{ t.photo.credit }}</a>{% if not forloop.last %} · {% endif %}{% endif %}{% endfor %}</p>
+
+    <h3 class="facts-title">{% trans "Did you know?" %}</h3>
+    <div class="island-facts">
+      {% for icon_name, title, text, source, url in facts %}
+      <div class="fact">
+        {% icon icon_name 30 %}
+        <h4>{{ title }}</h4>
+        <p>{{ text }}</p>
+        <a class="source" href="{{ url }}" rel="noopener">{% trans "Source:" %} {{ source }}</a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="gov-h">
+  <div class="container">
+    <div class="section-head">
+      <div><h2 id="gov-h">{% trans "Municipal government" %}</h2><p>{% trans "The local chief executives of Sibuyan's three towns." %}</p></div>
+      <div class="actions" style="margin:0">
+        <a class="text-link" href="{% url 'civic:transparency' %}?kind=eo">{% icon "scroll" 20 %}{% trans "Executive orders" %}</a>
+        <a class="text-link" href="{% url 'civic:transparency' %}#offices">{% icon "building" 20 %}{% trans "Offices" %}</a>
+      </div>
+    </div>
+    <div class="people">
+      {% for m in mayors %}
+      <article class="person">
+        <div class="portrait">{% icon "person" 36 %}<span class="tag sample">{% trans "Sample" %}</span></div>
+        <div><h3>{{ m.name }}</h3><p>{{ m.position }}, {{ m.municipality.name }}</p></div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% include "_divider.html" with shape="wave" tone="sky" %}
+<section class="section tint-sky" aria-labelledby="today-h">
+  <div class="container">
+    <div class="section-head">
+      <div><h2 id="today-h">{% trans "Today on Sibuyan" %}</h2><p>{% trans "Weather, sailings and the numbers to call, updated through the day." %}</p></div>
+    </div>
+    <div class="today">
+      <article class="card" aria-labelledby="wx-h">
+        <h3 class="card-title" id="wx-h">{% icon "cloud-sun" 20 %}{% trans "Weather" %}</h3>
+        <div id="weather" data-lat="{{ weather_lat }}" data-lon="{{ weather_lon }}" data-offline="{% trans 'Weather is unavailable offline.' %}">
+          <div class="temp" data-w="temp" aria-live="polite">—</div>
+          <p class="weather-desc" data-w="desc">{% trans "Loading…" %}</p>
+          <div class="boxes">
+            <div class="box"><span>{% trans "Feels like" %}</span><strong data-w="feels">—</strong></div>
+            <div class="box"><span>{% trans "Humidity" %}</span><strong data-w="humidity">—</strong></div>
+            <div class="box"><span>{% trans "Wind" %}</span><strong data-w="wind">—</strong></div>
+            <div class="box"><span>{% trans "Rain chance" %}</span><strong data-w="rain">—</strong></div>
+          </div>
+        </div>
+        <a class="text-link" href="https://bagong.pagasa.dost.gov.ph/" rel="noopener">{% trans "Official PAGASA bulletins" %} {% icon "arrow" 18 %}</a>
+      </article>
+
+      <article class="card" aria-labelledby="ferry-h">
+        <h3 class="card-title" id="ferry-h">{% icon "ship" 20 %}{% trans "Ferry status" %}</h3>
+        <ul class="rows">
+          {% for t in trips_today %}
+          <li><span><strong>{{ t.departure_time|time:"g:i A" }}</strong> · {{ t.route.origin }} → {{ t.route.destination }}{% if t.status_note %}<span class="meta">{{ t.status_note }}</span>{% endif %}</span><span class="badge status-{{ t.status }}">{{ t.get_status_display }}</span></li>
+          {% empty %}<li class="meta">{% trans "No sailings listed for today." %}</li>{% endfor %}
+        </ul>
+        <a class="text-link" href="{% url 'transport:board' %}">{% trans "Full ferry board" %} {% icon "arrow-right" 18 %}</a>
+      </article>
+
+      <article class="card" aria-labelledby="hot-h">
+        <h3 class="card-title" id="hot-h">{% icon "phone" 20 %}{% trans "Emergency hotlines" %}</h3>
+        <ul class="rows">
+          {% for h in hotlines %}
+          <li><span>{{ h.name }}{% if not h.is_verified %}<span class="meta">{% trans "sample number" %}</span>{% endif %}</span><a class="call{% if h.agency == 'national' %} urgent{% endif %}" href="tel:{{ h.tel }}">{% icon "phone" 16 %}{{ h.number }}</a></li>
+          {% endfor %}
+        </ul>
+        <a class="text-link" href="{% url 'emergency:hub' %}">{% trans "All hotlines" %} {% icon "arrow-right" 18 %}</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="prog-h">
+  <div class="container split">
+    <div>
+      <h2 id="prog-h">{% trans "Programs and assistance" %}</h2>
+      <p class="muted">{% trans "Scholarships, livelihood, senior and PWD benefits, farm support and more: answer a few questions to see what you may qualify for." %}</p>
+      <a class="btn" href="{% url 'programs:eligibility' %}">{% trans "Check what you qualify for" %}</a>
+    </div>
+    <ul class="list-links">
+      {% for p in programs %}
+      <li><a href="{{ p.get_absolute_url }}"><span>{{ p.name }}<span class="meta">{{ p.agency }} · {{ p.get_kind_display }}</span></span>{% icon "arrow-right" 20 %}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+{% include "_divider.html" with shape="ridge" tone="mint" %}
+<section class="section tint-mint patterned" aria-labelledby="tr-h">
+  <div class="container">
+    <div class="section-head">
+      <div><h2 id="tr-h">{% trans "Transparency" %}</h2><p>{% trans "Bids, procurement and financial reports, published under the Full Disclosure Policy." %}</p></div>
+    </div>
+    <div class="panels">
+      <div class="panel">
+        <h3>{% trans "Bids & procurement" %}</h3>
+        <ul class="doc-list">{% for d in bids %}<li><a href="{% url 'civic:transparency' %}?kind=procurement">{{ d.title }}</a><span class="year">{{ d.date_issued|date:"Y" }}{% if d.municipality %} · {{ d.municipality.name }}{% endif %}</span></li>{% endfor %}</ul>
+        <a class="text-link" href="{% url 'civic:transparency' %}?kind=procurement">{% trans "View all" %} {% icon "arrow-right" 18 %}</a>
+      </div>
+      <div class="panel">
+        <h3>{% trans "Financial reports" %}</h3>
+        <ul class="doc-list">{% for d in reports %}<li><a href="{% url 'civic:transparency' %}?kind=budget">{{ d.title }}</a><span class="year">{{ d.date_issued|date:"Y" }}{% if d.municipality %} · {{ d.municipality.name }}{% endif %}</span></li>{% endfor %}</ul>
+        <a class="text-link" href="{% url 'civic:transparency' %}?kind=budget">{% trans "View all" %} {% icon "arrow-right" 18 %}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="news-h">
+  <div class="container">
+    <div class="section-head">
+      <div><h2 id="news-h">{% trans "Latest news" %}</h2><p>{% trans "Announcements and advisories from the three towns." %}</p></div>
+      <a class="text-link" href="{% url 'news:list' %}">{% trans "All news" %} {% icon "arrow-right" 18 %}</a>
+    </div>
+    <div class="grid md-3">
+      {% for p in latest_posts %}{% include "news/_card.html" with post=p %}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

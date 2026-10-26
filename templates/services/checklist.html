@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% trans "Checklist" %} · {{ service.name }}{% endblock %}
+{% block content %}
+<div class="container narrow">
+  <header class="page-head">
+    <p class="crumbs no-print"><a href="{% url 'services:list' %}">{% trans "Services" %}</a> / <a href="{{ service.get_absolute_url }}">{{ service.name }}</a></p>
+    <h1>{% trans "What do I need?" %}</h1>
+  </header>
+  {% include "services/_checklist.html" %}
+</div>
+{% endblock %}

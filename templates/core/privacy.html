@@ -1,0 +1,37 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% trans "Privacy Notice" %}{% endblock %}
+{% block content %}
+<div class="container narrow" style="padding-top:40px">
+<article class="card">
+<h1>{% trans "Privacy Notice" %}</h1>
+<p class="meta">{% trans "Version" %} 2026-10 · {% trans "Republic Act No. 10173 (Data Privacy Act of 2012)" %}</p>
+<div class="note sample">{% trans "Prototype text. Each LGU's Data Protection Officer must review and adopt this notice, and fill in the real contact details, before launch." %}</div>
+
+<h2>{% trans "Who is responsible for your data" %}</h2>
+<p>{% trans "The Municipal Government of Magdiwang, San Fernando or Cajidiocan — whichever town your concern or request is for — is the personal information controller. Each LGU has a Data Protection Officer (DPO)." %}</p>
+
+<h2>{% trans "What we collect and why" %}</h2>
+<ul>
+  <li><strong>{% trans "Concerns and requests:" %}</strong> {% trans "your name, email and/or mobile number, barangay, the details and optional photo you send. Used only to act on your concern, route it to the right office and send you updates." %}</li>
+  <li><strong>{% trans "Optional account:" %}</strong> {% trans "username, password (stored encrypted) and email, so you can see all your concerns." %}</li>
+  <li><strong>{% trans "Alert subscriptions:" %}</strong> {% trans "your email, only if you subscribe." %}</li>
+  <li><strong>{% trans "Eligibility checker:" %}</strong> {% trans "nothing is saved. Your answers only filter the list on your screen." %}</li>
+  <li><strong>{% trans "Help Assistant:" %}</strong> {% trans "questions are logged without your name to improve the FAQ. Do not type personal details into it." %}</li>
+</ul>
+<p>{% trans "Legal basis: your consent, and the LGU's mandate to deliver public services (Sec. 12 of RA 10173). Photos are resized and their location (GPS) tags are removed when uploaded." %}</p>
+
+<h2>{% trans "Who can see it" %}</h2>
+<p>{% trans "Only authorised LGU staff of the office handling your concern and system administrators. We do not sell or share your data. We may disclose it only when required by law." %}</p>
+
+<h2>{% trans "How long we keep it" %}</h2>
+<p>{% trans "Concern records are kept while the concern is open and afterwards only as long as required by government records-retention rules, then securely deleted or anonymised." %}</p>
+
+<h2>{% trans "Cookies and outside services" %}</h2>
+<p>{% trans "We use only necessary cookies (session, security and your language/town choice). There are no advertising or third-party analytics trackers. Your browser fetches weather from Open-Meteo and map tiles from OpenStreetMap, which see your IP address as with any website." %}</p>
+
+<h2>{% trans "Your rights" %}</h2>
+<p>{% trans "You have the right to be informed, to access, to object, to correct, to erasure or blocking, to data portability, to damages, and to file a complaint with the National Privacy Commission (privacy.gov.ph). To exercise them, contact the DPO of your LGU:" %}</p>
+<p><strong>{% trans "Data Protection Officer" %}</strong> — <span class="badge sample">SAMPLE</span> dpo@lgu-sample.gov.ph</p>
+</article>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% load static %}{
+  "name": "SibuyanConnect",
+  "short_name": "Sibuyan",
+  "description": "Community portal of Magdiwang, San Fernando and Cajidiocan, Sibuyan Island, Romblon.",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#1F5E46",
+  "lang": "en",
+  "icons": [
+    {"src": "{% static 'icons/icon-192.png' %}", "sizes": "192x192", "type": "image/png"},
+    {"src": "{% static 'icons/icon-512.png' %}", "sizes": "512x512", "type": "image/png"},
+    {"src": "{% static 'icons/icon-maskable-512.png' %}", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ],
+  "shortcuts": [
+    {"name": "Hotlines", "url": "/emergency/"},
+    {"name": "Ferry schedule", "url": "/transport/"},
+    {"name": "Report a concern", "url": "/concerns/new/"}
+  ]
+}

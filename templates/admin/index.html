@@ -1,0 +1,9 @@
+{% extends "admin/index.html" %}
+{% block content %}
+<div class="module" style="margin-bottom:20px">
+  <table style="width:100%"><caption>Reports</caption>
+    <tr><th scope="row"><a href="{% url 'admin-analytics' %}">Analytics: most-viewed services, ticket volume and resolution time per office</a></th></tr>
+  </table>
+</div>
+{{ block.super }}
+{% endblock %}
